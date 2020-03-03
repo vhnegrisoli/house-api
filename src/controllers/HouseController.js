@@ -1,7 +1,6 @@
 import House from '../models/House';
 
 class HouseController {
-
   async store(req, res) {
     const { filename } = req.file;
     const { description, price, location, status } = req.body;

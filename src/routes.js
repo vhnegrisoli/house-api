@@ -21,12 +21,12 @@ routes.post('/houses', checkSession, upload.single('thumbnail'), HouseController
 async function checkSession(req, res, next) {
   const { user_id } = req.headers;
   if (!user_id) {
-    return res.status(validation.UNAUTHORIZED).json({ message: validation.USER_NOT_AUTHORIZED });
+    return res.status(UNAUTHORIZED).json({ message: USER_NOT_AUTHORIZED });
   }
   const user = await User.findById(user_id);
   console.log(user);
   if (!user) {
-    return res.status(validation.NOT_FOUND).json({ message: validation.USER_NOT_FOUND });
+    return res.status(NOT_FOUND).json({ message: USER_NOT_FOUND });
   }
   return next();
 }
