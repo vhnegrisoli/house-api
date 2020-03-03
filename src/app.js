@@ -5,11 +5,10 @@ import path from 'path';
 
 class App {
   constructor() {
-    mongoose.connect('mongodb://localhost:27017/devhouse_api',
-      {
-        useNewUrlParser: true,
-        useUnifiedTopology: true
-      });
+    mongoose.connect('mongodb://localhost:27017/devhouse_api', {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
     this.server = express();
     this.middlewares();
     this.routes();
@@ -17,10 +16,7 @@ class App {
 
   middlewares() {
     this.server.use(express.json());
-    this.server.use(
-      '/files',
-      express.static(path.resolve(__dirname, '..', 'uploads'))
-    );
+    this.server.use('/files', express.static(path.resolve(__dirname, '..', 'uploads')));
   }
 
   routes() {
