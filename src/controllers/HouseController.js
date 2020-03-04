@@ -1,6 +1,6 @@
 import House from '../models/House';
 import User from '../models/User';
-
+import * as Yup from 'yup';
 import {
   BAD_REQUEST,
   NOT_ENOUGH_FIELDS,
@@ -12,13 +12,22 @@ import {
 
 class HouseController {
   async store(req, res) {
+
+    const schema = Yup.object().shape({
+      description: Yup.string().required(),
+      price: Yup.number().required(),
+      location: Yup.string().required(),
+      status: Yup.boolean().required(),
+    });
+
     const { filename } = req.file;
     const { description, price, location, status } = req.body;
     const { user_id } = req.headers;
 
-    if (!filename || !description || !price || !location || !status) {
+    if (!await schema.isValid(req.body)) {
       return res.status(BAD_REQUEST).json({ message: NOT_ENOUGH_FIELDS })
     }
+
     const house = await House.create({
       thumbnail: filename,
       user: user_id,
@@ -39,10 +48,22 @@ class HouseController {
   }
 
   async update(req, res) {
+
+    const schema = Yup.object().shape({
+      description: Yup.string().required(),
+      price: Yup.number().required(),
+      location: Yup.string().required(),
+      status: Yup.boolean().required(),
+    });
+
     const { filename } = req.file;
     const { id } = req.params;
     const { description, price, location, status } = req.body;
     const { user_id } = req.headers;
+
+    if (!await schema.isValid(req.body)) {
+      return res.status(BAD_REQUEST).json({ message: NOT_ENOUGH_FIELDS });
+    }
 
     const house = await House.updateOne(
       { _id: id },

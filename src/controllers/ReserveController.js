@@ -1,9 +1,10 @@
 import Reserve from '../models/Reserve';
 import House from '../models/House';
 import User from '../models/User';
+import * as Yup from 'yup';
 import {
   BAD_REQUEST,
-  HOUSE_NOT_INFORMED,
+  NOT_ENOUGH_FIELDS,
   HOUSE_UNAVALIABLE,
   FORBIDDEN,
   DELETED_SUCCESS,
@@ -14,10 +15,14 @@ import {
 class ReserveController {
 
   async store(req, res) {
+    const schema = Yup.object().shape({
+      date: Yup.string().required(),
+      house_id: Yup.string().required()
+    });
     const { date, house_id } = req.body;
     const { user_id } = req.headers;
-    if (!house_id) {
-      return res.status(BAD_REQUEST).json({ message: HOUSE_NOT_INFORMED });
+    if (!await schema.isValid(req.body)) {
+      return res.status(BAD_REQUEST).json({ message: NOT_ENOUGH_FIELDS })
     }
     const house = await House.findById(house_id);
     const user = await User.findById(user_id);
@@ -37,11 +42,18 @@ class ReserveController {
   }
 
   async update(req, res) {
+    const schema = Yup.object().shape({
+      date: Yup.string().required(),
+      house_id: Yup.string().required()
+    });
     const { date, house_id } = req.body;
     const { user_id } = req.headers;
     const { id } = req.params;
     const house = await House.findById(house_id);
     const user = await User.findById(user_id);
+    if (!await schema.isValid(req.body)) {
+      return res.status(BAD_REQUEST).json({ message: NOT_ENOUGH_FIELDS })
+    }
     if (String(house.user) === String(user._id)) {
       return res.status(FORBIDDEN).json({ message: USER_FORBIDDEN });
     }
