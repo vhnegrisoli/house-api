@@ -4,7 +4,7 @@ import User from '../models/User';
 import {
   BAD_REQUEST,
   NOT_ENOUGH_FIELDS,
-  HOUSE_DELETED,
+  DELETED_SUCCESS,
   HOUSE_NOT_FOUND,
   FORBIDDEN,
   USER_FORBIDDEN
@@ -83,7 +83,7 @@ class HouseController {
       return res.status(FORBIDDEN).json({ message: USER_FORBIDDEN });
     }
     await House.findByIdAndDelete(id);
-    return res.json({ message: HOUSE_DELETED });
+    return res.json({ message: DELETED_SUCCESS });
   }
 }
 
