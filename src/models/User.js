@@ -1,9 +1,9 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model } from "mongoose";
 
 const UserSchema = new Schema({
   id: Number,
   nome: String,
-  email: String,
+  email: String
 });
 
-export default model('User', UserSchema); 
+export default model("User", UserSchema);

@@ -1,8 +1,6 @@
-import House from '../models/House';
-import User from '../models/User';
+import House from "../models/House";
 
 class DashboardController {
-
   async show(req, res) {
     const { user_id } = req.headers;
 

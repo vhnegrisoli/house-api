@@ -1,6 +1,6 @@
-import House from '../models/House';
-import User from '../models/User';
-import * as Yup from 'yup';
+import * as Yup from "yup";
+import House from "../models/House";
+import User from "../models/User";
 import {
   BAD_REQUEST,
   NOT_ENOUGH_FIELDS,
@@ -8,24 +8,23 @@ import {
   HOUSE_NOT_FOUND,
   FORBIDDEN,
   USER_FORBIDDEN
-} from '../utils/ValidationMessages';
+} from "../utils/ValidationMessages";
 
 class HouseController {
   async store(req, res) {
-
     const schema = Yup.object().shape({
       description: Yup.string().required(),
       price: Yup.number().required(),
       location: Yup.string().required(),
-      status: Yup.boolean().required(),
+      status: Yup.boolean().required()
     });
 
     const { filename } = req.file;
     const { description, price, location, status } = req.body;
     const { user_id } = req.headers;
 
-    if (!await schema.isValid(req.body)) {
-      return res.status(BAD_REQUEST).json({ message: NOT_ENOUGH_FIELDS })
+    if (!(await schema.isValid(req.body))) {
+      return res.status(BAD_REQUEST).json({ message: NOT_ENOUGH_FIELDS });
     }
 
     const house = await House.create({
@@ -34,7 +33,7 @@ class HouseController {
       description,
       price,
       location,
-      status,
+      status
     });
     return res.json(house);
   }
@@ -43,17 +42,16 @@ class HouseController {
     const { status } = req.query;
     const { user_id } = req.headers;
 
-    const houses = await House.find({ status: status, user: user_id });
+    const houses = await House.find({ status, user: user_id });
     return res.json({ houses });
   }
 
   async update(req, res) {
-
     const schema = Yup.object().shape({
       description: Yup.string().required(),
       price: Yup.number().required(),
       location: Yup.string().required(),
-      status: Yup.boolean().required(),
+      status: Yup.boolean().required()
     });
 
     const { filename } = req.file;
@@ -61,7 +59,7 @@ class HouseController {
     const { description, price, location, status } = req.body;
     const { user_id } = req.headers;
 
-    if (!await schema.isValid(req.body)) {
+    if (!(await schema.isValid(req.body))) {
       return res.status(BAD_REQUEST).json({ message: NOT_ENOUGH_FIELDS });
     }
 
@@ -73,8 +71,9 @@ class HouseController {
         description,
         price,
         location,
-        status,
-      });
+        status
+      }
+    );
     return res.json(house);
   }
 
